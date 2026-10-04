@@ -1,0 +1,517 @@
+```html
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FreeTime - Executive Dysfunction Day Out Assistant</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              cyan: '#06b6d4',
+              emerald: '#10b981',
+              violet: '#8b5cf6',
+              pink: '#ec4899',
+              darkBg: '#0f172a',
+              cardBg: '#1e293b'
+            }
+          },
+          animation: {
+            'pulse-glow': 'pulseGlow 2s infinite',
+            'bounce-subtle': 'bounceSubtle 1.5s infinite',
+            'spin-slow': 'spin 8s linear infinite'
+          },
+          keyframes: {
+            pulseGlow: {
+              '0%, 100%': { boxShadow: '0 0 15px rgba(6, 182, 212, 0.4), 0 0 30px rgba(139, 92, 246, 0.2)' },
+              '50%': { boxShadow: '0 0 25px rgba(16, 185, 129, 0.6), 0 0 45px rgba(6, 182, 212, 0.4)' }
+            },
+            bounceSubtle: {
+              '0%, 100%': { transform: 'translateY(0)' },
+              '50%': { transform: 'translateY(-4px)' }
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #0b0f19;
+      color: #f8fafc;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .glass-card {
+      background: rgba(30, 41, 59, 0.7);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .glass-card-active {
+      background: rgba(30, 41, 59, 0.9);
+      border-color: rgba(6, 182, 212, 0.4);
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .custom-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+</head>
+<body class="flex justify-center items-center min-h-screen bg-slate-950 p-0 sm:p-4">
+
+  <div class="w-full max-w-md h-[100vh] sm:h-[880px] sm:rounded-[36px] bg-slate-900 border-0 sm:border-4 border-slate-800 shadow-2xl flex flex-col overflow-hidden relative">
+
+    <!-- TOP HEADER -->
+    <header class="p-4 bg-slate-900/90 border-b border-slate-800/80 sticky top-0 z-30 backdrop-blur-md">
+      <div class="flex justify-between items-center mb-2">
+        <div class="flex items-center space-x-2">
+          <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-brand-cyan to-brand-violet flex items-center justify-center shadow-lg shadow-brand-cyan/20">
+            <i class="fa-solid font-bold text-white text-lg">⚡</i>
+          </div>
+          <div>
+            <h1 class="text-xl font-extrabold tracking-tight text-white flex items-center gap-1.5">
+              FreeTime <span class="text-xs px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 font-semibold">ADHD Mode</span>
+            </h1>
+          </div>
+        </div>
+        
+        <!-- Location Badge -->
+        <div class="flex items-center space-x-1 bg-slate-800/90 border border-slate-700/60 text-slate-200 text-xs px-2.5 py-1.5 rounded-full">
+          <i class="fa-solid fa-location-dot text-brand-cyan animate-pulse"></i>
+          <span class="font-medium">Glasgow, UK</span>
+        </div>
+      </div>
+
+      <!-- Interest Badges Horizontal Scroll -->
+      <div class="flex space-x-2 overflow-x-auto custom-scrollbar pt-1 pb-1 text-xs">
+        <span class="bg-cyan-500/10 text-cyan-300 border border-cyan-500/20 px-2.5 py-1 rounded-full whitespace-nowrap flex items-center gap-1">
+          🌿 Nature
+        </span>
+        <span class="bg-violet-500/10 text-violet-300 border border-violet-500/20 px-2.5 py-1 rounded-full whitespace-nowrap flex items-center gap-1">
+          🤫 Quiet Spots
+        </span>
+        <span class="bg-emerald-500/10 text-emerald-300 border border-emerald-500/20 px-2.5 py-1 rounded-full whitespace-nowrap flex items-center gap-1">
+          🏰 Local History
+        </span>
+        <span class="bg-pink-500/10 text-pink-300 border border-pink-500/20 px-2.5 py-1 rounded-full whitespace-nowrap flex items-center gap-1">
+          ☕ Low Friction Cafes
+        </span>
+      </div>
+    </header>
+
+    <main class="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar pb-32">
+
+      <!-- IMPULSE MODE BUTTON -->
+      <div class="text-center my-1">
+        <button id="impulseBtn" onclick="triggerImpulseMode()" class="w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-brand-cyan via-brand-violet to-brand-emerald text-white font-extrabold text-lg shadow-xl animate-pulse-glow hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-3 border border-white/20">
+          <i class="fa-solid fa-bolt text-yellow-300 text-xl animate-bounce-subtle"></i>
+          <span>JUST PICK FOR ME!</span>
+          <span class="text-xs font-normal bg-black/30 px-2 py-0.5 rounded-md">Zero Planning</span>
+        </button>
+        <p class="text-[11px] text-slate-400 mt-1.5 flex items-center justify-center gap-1">
+          <i class="fa-solid fa-shield-halved text-brand-emerald"></i> Prevents analysis paralysis • Picked instantly
+        </p>
+      </div>
+
+      <!-- ACTIVE ITINERARY / MICRO-ADVENTURE -->
+      <div class="flex items-center justify-between pt-2">
+        <h2 class="text-xs uppercase tracking-wider font-extrabold text-slate-400 flex items-center gap-1.5">
+          <i class="fa-solid fa-compass text-brand-cyan"></i> Suggested Day Out
+        </h2>
+        <span id="itineraryStatus" class="text-xs text-brand-emerald font-semibold flex items-center gap-1">
+          <span class="w-2 h-2 rounded-full bg-brand-emerald animate-ping"></span> 3 Micro-Stops Ready
+        </span>
+      </div>
+
+      <!-- CARDS CONTAINER -->
+      <div id="cardsContainer" class="space-y-4">
+        <!-- Rendered via JavaScript -->
+      </div>
+
+      <!-- QUICK TWEAK PROMPT BAR -->
+      <div class="glass-card p-3 rounded-2xl border border-slate-800 space-y-2 mt-4">
+        <div class="flex items-center justify-between text-xs text-slate-300 font-semibold">
+          <span class="flex items-center gap-1 text-brand-violet">
+            <i class="fa-solid fa-wand-magic-sparkles"></i> Need a quick adjustment?
+          </span>
+          <span class="text-[10px] text-slate-400">1-Tap AI Tweaks</span>
+        </div>
+        <div class="grid grid-cols-3 gap-2">
+          <button onclick="tweakItinerary('fewer_people')" class="py-2 px-2 bg-slate-800/80 hover:bg-slate-700/80 active:bg-slate-700 border border-slate-700/60 rounded-xl text-[11px] font-medium text-slate-200 transition-all text-center">
+            👥 Fewer People
+          </button>
+          <button onclick="tweakItinerary('more_nature')" class="py-2 px-2 bg-slate-800/80 hover:bg-slate-700/80 active:bg-slate-700 border border-slate-700/60 rounded-xl text-[11px] font-medium text-slate-200 transition-all text-center">
+            🌲 More Nature
+          </button>
+          <button onclick="tweakItinerary('shorter_walk')" class="py-2 px-2 bg-slate-800/80 hover:bg-slate-700/80 active:bg-slate-700 border border-slate-700/60 rounded-xl text-[11px] font-medium text-slate-200 transition-all text-center">
+            🚶 Shorter Walk
+          </button>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- TRANSITION AUDIO PLAYER (STUCK AT BOTTOM) -->
+    <div class="absolute bottom-0 left-0 right-0 p-3 bg-slate-900/95 border-t border-slate-800 backdrop-blur-lg z-20">
+      <div class="glass-card p-2.5 rounded-2xl flex items-center justify-between border border-cyan-500/30">
+        <div class="flex items-center space-x-3">
+          <button id="playAudioBtn" onclick="toggleAudio()" class="w-10 h-10 rounded-xl bg-brand-cyan text-slate-950 flex items-center justify-center font-bold shadow-lg shadow-brand-cyan/30 active:scale-95 transition-all">
+            <i id="audioIcon" class="fa-solid fa-play"></i>
+          </button>
+          <div class="overflow-hidden">
+            <div class="text-xs font-bold text-white flex items-center gap-1">
+              <span>Transition Soundscapes</span>
+              <span class="text-[9px] bg-emerald-500/20 text-emerald-300 px-1.5 py-0.2 rounded font-mono">LO-FI</span>
+            </div>
+            <p id="audioTrackName" class="text-[11px] text-slate-400 truncate">Gentle Focus Walk (Beats to leave the house)</p>
+          </div>
+        </div>
+        <div class="flex items-center space-x-1">
+          <button onclick="changeTrack()" class="p-2 text-slate-400 hover:text-white transition-colors">
+            <i class="fa-solid fa-forward-step text-sm"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- VIBE CHECK YOUTUBE MODAL -->
+    <div id="vibeModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden flex items-center justify-center p-4">
+      <div class="glass-card w-full max-w-sm rounded-3xl overflow-hidden border border-slate-700 shadow-2xl relative animate-in fade-in zoom-in duration-200">
+        <button onclick="closeVibeModal()" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-black/60 text-white flex items-center justify-center z-10 hover:bg-black">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+        
+        <div class="p-4 bg-slate-900 border-b border-slate-800">
+          <h3 id="modalTitle" class="text-sm font-bold text-white flex items-center gap-2">
+            <i class="fa-brands fa-youtube text-red-500 text-lg"></i> Vibe Check: Kelvingrove
+          </h3>
+          <p class="text-[11px] text-slate-400">See crowds, noise levels & lighting before leaving home.</p>
+        </div>
+
+        <div class="relative aspect-video bg-black flex items-center justify-center">
+          <iframe id="youtubeIframe" class="w-full h-full" src="" title="Vibe Check Preview" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+
+        <div class="p-4 space-y-3 bg-slate-900/90">
+          <div class="grid grid-cols-2 gap-2 text-xs">
+            <div class="bg-slate-800 p-2 rounded-xl">
+              <span class="text-slate-400 block text-[10px]">Noise Level</span>
+              <span id="vibeNoise" class="font-bold text-emerald-400">Low / Quiet</span>
+            </div>
+            <div class="bg-slate-800 p-2 rounded-xl">
+              <span class="text-slate-400 block text-[10px]">Crowd Density</span>
+              <span id="vibeCrowd" class="font-bold text-cyan-400">Spacious</span>
+            </div>
+          </div>
+          <button onclick="closeVibeModal()" class="w-full py-2.5 bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold rounded-xl transition-all">
+            Looks Good! Close Preview
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ACHIEVEMENT UNLOCKED NOTIFICATION BANNER -->
+    <div id="achievementBanner" class="fixed top-5 left-1/2 -translate-x-1/2 w-11/12 max-w-xs bg-slate-900/95 border border-amber-500/50 shadow-2xl shadow-amber-500/20 rounded-2xl p-3 z-50 transform -translate-y-24 transition-transform duration-300 flex items-center gap-3">
+      <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-xl shrink-0">
+        🏆
+      </div>
+      <div>
+        <h4 class="text-xs font-bold text-amber-300 uppercase tracking-wider">Breadcrumb Unlocked!</h4>
+        <p id="achievementText" class="text-[11px] text-slate-200">You checked in at Kelvingrove Art Gallery!</p>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // --- APP DATA STATE ---
+    const initialItinerary = [
+      {
+        id: 'stop_1',
+        time: '10:30 AM',
+        title: 'Kelvingrove Art Gallery',
+        category: 'Culture & Quiet',
+        desc: 'Wide lofty halls, peaceful atmosphere. Great for wandering with headphones.',
+        image: 'https://images.unsplash.com/photo-1574180045827-681f8a1a9622?auto=format&fit=crop&w=600&q=80',
+        videoUrl: 'https://www.youtube.com/embed/5a6aP_yK180?autoplay=1&mute=1',
+        vibeNoise: 'Very Low 🤫',
+        vibeCrowd: 'Sparse / Wide Spaces',
+        checkedIn: false,
+        bailPlan: 'Exit through the rear park entrance directly into Kelvingrove Park. Subway station (Kelvinhall) is 4 mins walk.',
+        trivia: 'Did you know? Salvador Dalí\'s Christ of St John of the Cross hangs here and was once bought for just £8,200!',
+        address: 'Argyle St, Glasgow G3 8AG'
+      },
+      {
+        id: 'stop_2',
+        time: '1:00 PM',
+        title: 'Glasgow Botanic Gardens',
+        category: 'Nature Walk',
+        desc: 'Kibble Palace glasshouse offers warm tropical air and lush greenery to reset your sensory system.',
+        image: 'https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?auto=format&fit=crop&w=600&q=80',
+        videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&mute=1',
+        vibeNoise: 'Natural Birds / Gentle Wind',
+        vibeCrowd: 'Open Lawn',
+        checkedIn: false,
+        bailPlan: 'Byres Road bus stop is right at the main gate. Busses #8 and #9 return straight to city centre every 7 mins.',
+        trivia: 'Kibble Palace was originally a private greenhouse owned by John Kibble before being shipped down the River Clyde!',
+        address: '730 Great Western Rd, Glasgow G12 0UE'
+      },
+      {
+        id: 'stop_3',
+        time: '3:30 PM',
+        title: 'Papercup Coffee Company',
+        category: 'Low-Friction Chill',
+        desc: 'Relaxed independent coffee nook. Friendly staff, cozy corner seats to sketch or listen to music.',
+        image: 'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=600&q=80',
+        videoUrl: 'https://www.youtube.com/embed/L_LUpnjgPso?autoplay=1&mute=1',
+        vibeNoise: 'Soft Lo-Fi Background',
+        vibeCrowd: 'Cozy / 8 Tables',
+        checkedIn: false,
+        bailPlan: 'If seating is full, grab a take-away cup and sit at the quiet church garden 20 meters down Great Western Road.',
+        trivia: 'Papercup roasts all their specialty beans locally in Glasgow with organic ethics!',
+        address: '603 Great Western Rd, Glasgow G12 8HX'
+      }
+    ];
+
+    const impulseAdventures = [
+      {
+        id: 'impulse_1',
+        time: 'Right Now!',
+        title: 'Hidden Fossil Grove at Whiteinch',
+        category: 'Micro-Adventure',
+        desc: 'An ancient 330-million-year-old fossilized forest hidden inside Victoria Park. Zero crowds!',
+        image: 'https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=600&q=80',
+        videoUrl: 'https://www.youtube.com/embed/5a6aP_yK180?autoplay=1&mute=1',
+        vibeNoise: 'Pin drop quiet 🌲',
+        vibeCrowd: 'Empty / Tranquil',
+        checkedIn: false,
+        bailPlan: 'Partick station is 10 mins walk or direct taxi pickup spot right at Victoria Park gate.',
+        trivia: 'These trees grew near the equator back when Scotland was in a tropical climate zone!',
+        address: 'Victoria Park, Glasgow G14 1BN'
+      },
+      {
+        id: 'impulse_2',
+        time: 'Right Now!',
+        title: 'The Necropolis Overlook Walk',
+        category: 'Panoramic & Quiet',
+        desc: 'A gentle uphill walk to the highest hill in the city. Inspiring 360-degree views over Glasgow Cathedral.',
+        image: 'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=600&q=80',
+        videoUrl: 'https://www.youtube.com/embed/5a6aP_yK180?autoplay=1&mute=1',
+        vibeNoise: 'Calm Breeze',
+        vibeCrowd: 'Wide open hill',
+        checkedIn: false,
+        bailPlan: 'High Street train station is directly at the bottom of the hill.',
+        trivia: 'Over 50,000 individuals are commemorated on this Victorian cemetery hill!',
+        address: 'Castle St, Glasgow G4 0UZ'
+      }
+    ];
+
+    let currentItinerary = [...initialItinerary];
+
+    // AUDIO TRACKS FOR TRANSITION ANXIETY
+    const audioTracks = [
+      { name: "Gentle Focus Walk (Lo-fi Beats)", src: "https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=lofi-study-112191.mp3" },
+      { name: "Ambient Forest Breeze & Soft Rain", src: "https://cdn.pixabay.com/download/audio/2021/09/06/audio_848148b593.mp3?filename=soft-rain-ambient-111154.mp3" }
+    ];
+    let currentTrackIdx = 0;
+    let isPlaying = false;
+    let audioObject = new Audio(audioTracks[0].src);
+
+    // --- STREAMING_CHUNK:Rendering Dynamic Cards... ---
+    function renderItinerary() {
+      const container = document.getElementById('cardsContainer');
+      container.innerHTML = '';
+
+      currentItinerary.forEach((item, index) => {
+        const card = document.createElement('div');
+        card.className = `glass-card rounded-2xl overflow-hidden border border-slate-800 transition-all duration-300 ${item.checkedIn ? 'border-brand-emerald/50 bg-slate-900/40' : ''}`;
+        
+        card.innerHTML = `
+          <!-- CARD HEADER IMAGE & BADGES -->
+          <div class="relative h-36 bg-slate-800 overflow-hidden">
+            <img src="${item.image}" alt="${item.title}" class="w-full h-full object-cover opacity-80 hover:opacity-100 transition-opacity">
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-black/40"></div>
+            
+            <div class="absolute top-2.5 left-2.5 flex items-center gap-1.5">
+              <span class="bg-black/60 backdrop-blur-md text-slate-200 text-[10px] font-mono px-2 py-0.5 rounded-md border border-white/10">
+                ⏰ ${item.time}
+              </span>
+              <span class="bg-brand-violet/80 backdrop-blur-md text-white text-[10px] font-semibold px-2 py-0.5 rounded-md">
+                ${item.category}
+              </span>
+            </div>
+
+            <!-- VIBE CHECK BUTTON -->
+            <button onclick="openVibeModal('${item.id}')" class="absolute bottom-2.5 right-2.5 bg-red-600/90 hover:bg-red-500 text-white text-[11px] font-bold px-2.5 py-1 rounded-xl shadow-lg flex items-center gap-1.5 transition-transform active:scale-95">
+              <i class="fa-brands fa-youtube"></i> Vibe Check
+            </button>
+          </div>
+
+          <!-- CARD BODY CONTENT -->
+          <div class="p-3.5 space-y-3">
+            <div>
+              <h3 class="font-bold text-base text-white flex items-center justify-between">
+                <span>${item.title}</span>
+                ${item.checkedIn ? '<span class="text-xs bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded-full border border-emerald-500/30">✓ Visited</span>' : ''}
+              </h3>
+              <p class="text-xs text-slate-300 mt-1 leading-relaxed">${item.desc}</p>
+            </div>
+
+            <!-- ACTION BUTTONS ROW -->
+            <div class="flex items-center gap-2 pt-1">
+              <!-- CHECK IN BREADCRUMB BUTTON -->
+              <button onclick="checkIn('${item.id}')" class="flex-1 py-2 px-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${item.checkedIn ? 'bg-emerald-600/30 text-emerald-300 border border-emerald-500/40' : 'bg-brand-cyan/20 hover:bg-brand-cyan/30 text-cyan-300 border border-cyan-500/30'}">
+                <span>${item.checkedIn ? '🏆 Check-in Done' : '📍 Check-In (Breadcrumb)'}</span>
+              </button>
+
+              <!-- BAIL PLAN EXPAND TOGGLE -->
+              <button onclick="toggleBailPlan('${item.id}')" class="py-2 px-3 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-xs font-semibold flex items-center gap-1 border border-slate-700">
+                <i class="fa-solid fa-person-running text-amber-400"></i> Bail Plan
+              </button>
+            </div>
+
+            <!-- HIDDEN/EXPANDABLE BAIL PLAN CONTAINER -->
+            <div id="bailPlan_${item.id}" class="hidden p-3 bg-amber-500/10 border border-amber-500/20 rounded-xl text-xs space-y-1">
+              <div class="font-bold text-amber-400 flex items-center gap-1">
+                <i class="fa-solid fa-shield text-amber-400"></i> Escape Route & Low-Stress Exit:
+              </div>
+              <p class="text-slate-300 text-[11px]">${item.bailPlan}</p>
+            </div>
+
+            <!-- UNLOCKED TRIVIA BOX IF CHECKED IN -->
+            ${item.checkedIn ? `
+              <div class="p-2.5 bg-emerald-500/10 border border-emerald-500/20 rounded-xl text-xs space-y-1 animate-in fade-in">
+                <div class="font-bold text-emerald-400 flex items-center gap-1">
+                  🎁 Unlocked Local Trivia:
+                </div>
+                <p class="text-slate-300 text-[11px]">${item.trivia}</p>
+              </div>
+            ` : ''}
+
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    // --- STREAMING_CHUNK:Adding Interactive Impulse & Tweak Logic... ---
+    function triggerImpulseMode() {
+      const btn = document.getElementById('impulseBtn');
+      btn.classList.add('scale-95');
+      setTimeout(() => btn.classList.remove('scale-95'), 150);
+
+      // Randomly choose one impulse adventure
+      const randomAdventure = impulseAdventures[Math.floor(Math.random() * impulseAdventures.length)];
+      currentItinerary = [randomAdventure];
+      
+      document.getElementById('itineraryStatus').innerHTML = `
+        <span class="w-2 h-2 rounded-full bg-yellow-400 animate-ping"></span> Impulse Mode Active
+      `;
+
+      renderItinerary();
+      
+      // Auto-trigger transition audio
+      if (!isPlaying) {
+        toggleAudio();
+      }
+    }
+
+    function tweakItinerary(type) {
+      if (type === 'fewer_people') {
+        currentItinerary = initialItinerary.filter(item => item.vibeNoise.includes('Low') || item.vibeNoise.includes('Quiet'));
+      } else if (type === 'more_nature') {
+        currentItinerary = initialItinerary.filter(item => item.category.includes('Nature') || item.category.includes('Culture'));
+      } else if (type === 'shorter_walk') {
+        currentItinerary = [initialItinerary[0], initialItinerary[2]];
+      }
+      renderItinerary();
+    }
+
+    function toggleBailPlan(id) {
+      const el = document.getElementById(`bailPlan_${id}`);
+      if (el.classList.contains('hidden')) {
+        el.classList.remove('hidden');
+      } else {
+        el.classList.add('hidden');
+      }
+    }
+
+    function checkIn(id) {
+      const item = currentItinerary.find(i => i.id === id);
+      if (item) {
+        item.checkedIn = true;
+        renderItinerary();
+
+        // Show banner
+        const banner = document.getElementById('achievementBanner');
+        document.getElementById('achievementText').innerText = `Checked in at ${item.title}! Trivia unlocked.`;
+        banner.classList.remove('-translate-y-24');
+        setTimeout(() => {
+          banner.classList.add('-translate-y-24');
+        }, 3500);
+      }
+    }
+
+    // --- STREAMING_CHUNK:Handling Modal & YouTube Logic... ---
+    function openVibeModal(id) {
+      const item = currentItinerary.find(i => i.id === id);
+      if (item) {
+        document.getElementById('modalTitle').innerText = `Vibe Check: ${item.title}`;
+        document.getElementById('youtubeIframe').src = item.videoUrl;
+        document.getElementById('vibeNoise').innerText = item.vibeNoise;
+        document.getElementById('vibeCrowd').innerText = item.vibeCrowd;
+        document.getElementById('vibeModal').classList.remove('hidden');
+      }
+    }
+
+    function closeVibeModal() {
+      document.getElementById('vibeModal').classList.add('hidden');
+      document.getElementById('youtubeIframe').src = '';
+    }
+
+    // --- STREAMING_CHUNK:Audio Player System... ---
+    function toggleAudio() {
+      const btnIcon = document.getElementById('audioIcon');
+      if (isPlaying) {
+        audioObject.pause();
+        isPlaying = false;
+        btnIcon.className = 'fa-solid fa-play';
+      } else {
+        audioObject.play().then(() => {
+          isPlaying = true;
+          btnIcon.className = 'fa-solid fa-pause';
+        }).catch(e => {
+          console.log("Audio autoplay prevented or error: ", e);
+        });
+      }
+    }
+
+    function changeTrack() {
+      audioObject.pause();
+      currentTrackIdx = (currentTrackIdx + 1) % audioTracks.length;
+      audioObject = new Audio(audioTracks[currentTrackIdx].src);
+      document.getElementById('audioTrackName').innerText = audioTracks[currentTrackIdx].name;
+      if (isPlaying) {
+        audioObject.play();
+      }
+    }
+
+    // Initial load
+    window.onload = () => {
+      renderItinerary();
+    };
+  </script>
+</body>
+</html>
+```
